@@ -63,6 +63,41 @@ app
     });
   });
 
+////////////requests targetting a specific artcile////////////
+app
+  .route("/articles/:articleTitle")
+
+  .get(function (req, res) {
+    Article.findOne(
+      {
+        title: req.params.articleTitle,
+      },
+      function (err, foundArticle) {
+        if (foundArticle) {
+          res.send(foundArticle);
+        } else {
+          res.send("No article with that title could be found");
+        }
+      }
+    );
+  })
+  .put(function (req, res) {
+    const articleTitle = req.params.articleTitle;
+
+    Article.update(
+      { title: articleTitle },
+      { content: req.body.newContent },
+      { overwrite: true },
+      function (err) {
+        if (!err) {
+          res.send("Successfully updated the content of the selected article.");
+        } else {
+          res.send(err);
+        }
+      }
+    );
+  });
+
 app.listen(3000, function () {
   console.log("Server started on port 3000");
 });
