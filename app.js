@@ -96,8 +96,31 @@ app
         }
       }
     );
+  })
+  .patch(function (req, res) {
+    const articleTitle = req.params.articleTitle;
+    Article.update(
+      { title: articleTitle },
+      { content: req.body.newContent },
+      function (err) {
+        if (!err) {
+          res.send("Successfully updated selected article.");
+        } else {
+          res.send(err);
+        }
+      }
+    );
+  })
+  .delete(function (req, res) {
+    const articleTitle = req.params.articleTitle;
+    LostPet.findOneAndDelete({ title: articleTitle }, function (err) {
+      if (!err) {
+        res.send("Successfully deleted selected article.");
+      } else {
+        res.send(err);
+      }
+    });
   });
-
 app.listen(3000, function () {
   console.log("Server started on port 3000");
 });
